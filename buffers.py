@@ -7,7 +7,7 @@ class Buffer:
     # Métodos de Lectura
     def __read(self, length: int):
         end_position = self.__position + length
-        if end_position >= len(self.__content):
+        if end_position > len(self.__content):
             return None
         ret = memoryview(self.__content)[self.__position:end_position].tobytes()
         self.__position += length
@@ -83,4 +83,3 @@ class Buffer:
 
     def get_content(self):
         return self.__content
-    
