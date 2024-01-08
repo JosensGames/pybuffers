@@ -1,5 +1,5 @@
 # python-buffers
-Escribe en bytes al igual que uint8_t, uint16_t, bool, ... en C++; a través de python!
+Escribe/Lee en bytes al igual que uint8_t, uint16_t, bool, ... en C++; a través de python!
 
 ## Ejemplos:
 Crear un búfer:
