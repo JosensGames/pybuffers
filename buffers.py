@@ -1,8 +1,8 @@
 # Esto puede ser 'start-int' o 'end-char'
-__STRING_MODE = 'end-char'
+_STRING_MODE = 'end-char'
 
 class Buffer:
-    def __init__(self, _bytes: bytearray = None, string_mode: str = __STRING_MODE) -> None:
+    def __init__(self, _bytes: bytearray = None, string_mode: str = _STRING_MODE) -> None:
         self.__content = _bytes or bytearray()
         self.__position = 0
         self.__string_mode = string_mode
