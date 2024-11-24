@@ -1,5 +1,8 @@
+# Esto puede ser 'start-int' o 'end-char'
+__STRING_MODE = 'end-char'
+
 class Buffer:
-    def __init__(self, _bytes: bytearray = None, string_mode: str = 'start-int') -> None:
+    def __init__(self, _bytes: bytearray = None, string_mode: str = __STRING_MODE) -> None:
         self.__content = _bytes or bytearray()
         self.__position = 0
         self.__string_mode = string_mode
@@ -29,7 +32,7 @@ class Buffer:
         if self.__string_mode == 'start-int':
             length = self.get_u8()
         elif self.__string_mode == 'end-char':
-            length = self.__content.index(ord(' '), self.__position) - self.__position + 1
+            length = self.__content.index(0x00, self.__position) - self.__position 
         
         return self.__read(length).decode('utf-8')
         
@@ -38,17 +41,23 @@ class Buffer:
         return bool(self.__read(1))
     
     # Métodos de Escritura
-    def __write(self, length: int, value: any):
+    def __write(self, val_length: int, value: any):
         if not isinstance(value, (str, int, bool)):
             return
         
         if isinstance(value, (int, bool)):
-            self.__content.extend(value.to_bytes(length))
-            self.__position += length
+            self.__content.extend(value.to_bytes(length=val_length, byteorder='little'))
+            self.__position += val_length
         elif isinstance(value, str):
-            self.__content.extend(length.to_bytes(length=1))
+            if self.__string_mode == 'start-int':
+                self.__content.extend(val_length.to_bytes(length=1))
+            
             self.__content.extend(value.encode('utf-8'))
-            self.__position += length
+
+            if self.__string_mode == 'end-char':
+                self.__content.extend(int(0).to_bytes(length=1))
+            
+            self.__position += val_length
         
     
     def put_u8(self, value: int):
@@ -83,3 +92,8 @@ class Buffer:
 
     def get_content(self):
         return self.__content
+    
+    def clear(self):
+        del self.__content
+        self.__content = bytearray()
+
